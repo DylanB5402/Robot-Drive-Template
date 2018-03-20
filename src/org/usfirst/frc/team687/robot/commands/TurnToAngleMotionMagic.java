@@ -13,7 +13,7 @@ public class TurnToAngleMotionMagic extends Command {
 
 	private double m_desiredAngle;
 	private double m_error;
-	private double m_encoderPosition;
+	private double m_DesiredEncoderPosition;
 	
     public TurnToAngleMotionMagic(double angle) {
     	m_desiredAngle = angle;
@@ -32,7 +32,7 @@ public class TurnToAngleMotionMagic extends Command {
     		m_error += 360;
     	}
     	
-    	m_encoderPosition = NerdyMath.angleToTicks(m_error);
+    	m_DesiredEncoderPosition = NerdyMath.angleToTicks(m_error);
     	
     }
 
@@ -40,8 +40,8 @@ public class TurnToAngleMotionMagic extends Command {
     protected void execute() { 
     	m_error = -m_desiredAngle - Robot.drive.getAngle();
     	if (m_error > DriveConstants.kDriveRotationTolerance)
-    		Robot.drive.setPositionMotionMagic(m_encoderPosition, -m_encoderPosition);
-    	else if (Math.abs(Robot.drive.getLeftMasterPosition()) - m_encoderPosition > )
+    		Robot.drive.setPositionMotionMagic(m_DesiredEncoderPosition, -m_DesiredEncoderPosition);
+    	else if ((Math.abs(Robot.drive.getLeftMasterPosition()) - m_DesiredEncoderPosition > DriveConstants.kRotationalEncoderTolerance) || )
     	
     }
 
