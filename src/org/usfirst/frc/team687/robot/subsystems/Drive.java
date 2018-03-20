@@ -2,6 +2,7 @@ package org.usfirst.frc.team687.robot.subsystems;
 
 import org.usfirst.frc.team687.robot.RobotMap;
 import org.usfirst.frc.team687.robot.commands.TankDrive;
+import org.usfirst.frc.team687.robot.constants.DriveConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -17,64 +18,103 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drive extends Subsystem {
 
-	private final TalonSRX m_lMasterTalon, m_leftTalon1;
-	private final TalonSRX m_rMasterTalon, m_rightTalon1;
+	private final TalonSRX m_leftMaster, m_leftSlave1;
+	private final TalonSRX m_rightMaster, m_rightSlave1;
 	private final AHRS m_nav;
 	private double m_previousDistance;
     private double m_currentX, m_currentY;
     
 	public Drive() {
-		m_lMasterTalon = new TalonSRX(RobotMap.kLeftMasterTalonSRXID);
-		m_leftTalon1 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX1ID);
-		m_rMasterTalon = new TalonSRX(RobotMap.kRightMasterTalonSRXID);
-		m_rightTalon1 = new TalonSRX(RobotMap.kRightSlaveTalonSRX1ID);
+		m_leftMaster = new TalonSRX(RobotMap.kLeftMasterTalonSRXID);
+		m_leftSlave1 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX1ID);
+		m_rightMaster = new TalonSRX(RobotMap.kRightMasterTalonSRXID);
+		m_rightSlave1 = new TalonSRX(RobotMap.kRightSlaveTalonSRX1ID);
 		
-		m_lMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-		m_rMasterTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		
+		m_rightSlave1.follow(m_rightMaster);
+		m_leftSlave1.follow(m_leftMaster);
 		m_nav = new AHRS(SPI.Port.kMXP);
 		
+		m_leftMaster.setInverted(true);
+		m_leftSlave1.setInverted(true);
+		
+		m_rightMaster.setInverted(false);
+		m_rightSlave1.setInverted(false);
+		
+		m_leftMaster.setSensorPhase(true);
+		m_rightMaster.setSensorPhase(false);
+		
+		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);
+		m_leftMaster.config_kI(0, DriveConstants.kLeftI, 0);
+		m_leftMaster.config_kD(0, DriveConstants.kLeftD, 0);
+		m_leftMaster.config_kF(0, DriveConstants.kLeftF, 0);
+		
+		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);
+		m_leftMaster.config_kI(0, DriveConstants.kLeftI, 0);
+		m_leftMaster.config_kD(0, DriveConstants.kLeftD, 0);
+		m_leftMaster.config_kF(0, DriveConstants.kLeftF, 0);
+		
+		m_leftMaster.configMotionAcceleration(DriveConstants.kLeftAcceleration, 0);
+		m_leftMaster.configMotionCruiseVelocity(DriveConstants.kLeftCruiseVelocity, 0);
+		
+		m_rightMaster.configMotionAcceleration(DriveConstants.kRightAcceleration, 0);
+		m_rightMaster.configMotionCruiseVelocity(DriveConstants.kRightCruiseVelocity, 0);
+			
 	}
 	
 	public void setPower(double leftPower, double rightPower) {
 
-		m_lMasterTalon.set(ControlMode.PercentOutput, leftPower);
-		m_leftTalon1.set(ControlMode.PercentOutput, leftPower);
-		m_rMasterTalon.set(ControlMode.PercentOutput, rightPower);
-		m_rightTalon1.set(ControlMode.PercentOutput, rightPower);
+		m_leftMaster.set(ControlMode.PercentOutput, leftPower);
+		m_rightMaster.set(ControlMode.PercentOutput, rightPower);
     }
 	
+	public void setPowerZero() {
+		m_leftMaster.set(ControlMode.PercentOutput, 0);
+		m_rightMaster.set(ControlMode.PercentOutput, 0);
+	}
+	
+	public void setPositionMotionMagic(double leftPosition, double rightPosition) {
+		m_leftMaster.set(ControlMode.MotionMagic, leftPosition);
+		m_rightMaster.set(ControlMode.MotionMagic, rightPosition);
+	}
+	
+	public void resetEncoders() {
+		m_leftMaster.setSelectedSensorPosition(0, 0, 0);
+		m_rightMaster.setSelectedSensorPosition(0, 0, 0);
+	}
 	public double getLeftOutputVoltage() {
-		return m_lMasterTalon.getMotorOutputVoltage();
+		return m_leftMaster.getMotorOutputVoltage();
 	}
 	
 	public double getLeftMasterCurrent() {
-		return m_lMasterTalon.getOutputCurrent();
+		return m_leftMaster.getOutputCurrent();
 	}
 	
 	public double getLeftMasterPosition() {
-		return m_lMasterTalon.getSelectedSensorPosition(0);
+		return m_leftMaster.getSelectedSensorPosition(0);
 	}
 	
 	public double getLeftMasterSpeed() {
-		return m_lMasterTalon.getSelectedSensorVelocity(0);
+		return m_leftMaster.getSelectedSensorVelocity(0);
 	}
 	
 	
 	public double getRightOutputVoltage() {
-		return m_rMasterTalon.getMotorOutputVoltage();
+		return m_rightMaster.getMotorOutputVoltage();
 	}
 	
 	public double getRightMasterCurrent() {
-		return m_rMasterTalon.getOutputCurrent();
+		return m_rightMaster.getOutputCurrent();
 	}
 	
 	public double getRightMasterPosition() {
-		return m_rMasterTalon.getSelectedSensorPosition(0);
+		return m_rightMaster.getSelectedSensorPosition(0);
 	}
 	
 	public double getRightMasterSpeed() {
-		return m_rMasterTalon.getSelectedSensorVelocity(0);
+		return m_rightMaster.getSelectedSensorVelocity(0);
 	}
 	
 	
@@ -87,13 +127,10 @@ public class Drive extends Subsystem {
 	}
 	
 	public double getAngle() {
-//		converts angle from -180 to 180 to 0 to 360
-		
+//		converts angle from -180 to 180 to 0 to 360	
 //		sets positive y as 0 deg, robot's front is 0 deg
-//		return (360 - getYaw()) % 360;
+		return (360 - getYaw()) % 360;
 		
-//		sets positive x as 0 deg, robot's front is 90 deg
-		return ((90 - getYaw()) % 360);
 	}
 	
     public void initDefaultCommand() {
