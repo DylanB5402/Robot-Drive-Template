@@ -31,9 +31,15 @@ public class OI {
 	public double getRightY() {
 		return rightStick.getY();
 	}
+	
 	public double getRightX() {
 		return rightStick.getX();
 	}
+	
+	public boolean isLeftTriggerPulled() {
+		return leftStick.getRawButton(1);
+	}
+	
 	public void reportToSmartDashboard() {
 		SmartDashboard.putNumber("Left Stick Y", getLeftY());
 		SmartDashboard.putNumber("Right Stick Y", getRightY());
