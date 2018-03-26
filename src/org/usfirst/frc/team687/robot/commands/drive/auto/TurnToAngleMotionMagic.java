@@ -1,4 +1,4 @@
-package org.usfirst.frc.team687.robot.commands;
+package org.usfirst.frc.team687.robot.commands.drive.auto;
 
 import org.usfirst.frc.team687.robot.Robot;
 import org.usfirst.frc.team687.robot.constants.DriveConstants;
@@ -9,27 +9,21 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TurnToAngle extends Command {
-	
+public class TurnToAngleMotionMagic extends Command {
+
 	private double m_desiredAngle;
 	private double m_error;
-	private double m_currentAngle;
-	private double m_power;
+	private double m_DesiredEncoderPosition;
 	
-    public TurnToAngle(double angle) {
+    public TurnToAngleMotionMagic(double angle) {
     	m_desiredAngle = angle;
-        requires(Robot.drive);
+       requires(Robot.drive);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
-    }
-
-    // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	m_currentAngle = Robot.drive.getAngle();
-    	m_error = -m_desiredAngle - m_currentAngle;
+    	Robot.drive.resetEncoders();
+    	m_error = -m_desiredAngle - Robot.drive.getAngle();
     	
     	if (m_error >= 180) {
     		m_error -= 360;
@@ -38,16 +32,20 @@ public class TurnToAngle extends Command {
     		m_error += 360;
     	}
     	
-    	m_power = m_error * DriveConstants.kRotP;
+    	m_DesiredEncoderPosition = NerdyMath.angleToTicks(m_error);
     	
-    	NerdyMath.threshold(m_power, DriveConstants.kMinRotPower, DriveConstants.kMaxRotPower);
-    	
-    	Robot.drive.setPower(m_power, m_power);
+    }
+
+    // Called repeatedly when this Command is scheduled to run
+    protected void execute() { 
+    	m_error = -m_desiredAngle - Robot.drive.getAngle();
+    	Robot.drive.resetEncoders();
+    	Robot.drive.setPositionMotionMagic(m_DesiredEncoderPosition, -m_DesiredEncoderPosition);    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Math.abs(m_error) <= DriveConstants.kDriveRotationTolerance;
+        return NerdyMath.errorTolerance(m_error, DriveConstants.kDriveRotationTolerance);
     }
 
     // Called once after isFinished returns true

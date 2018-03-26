@@ -185,4 +185,13 @@ public class NerdyMath {
 	    public static double angleToTicks(double angle) {
 	    	return Math.toRadians(angle) * 0.5 * inchesToTicks(DriveConstants.kDrivetrainWidth);
 	    }
+	    
+	    public static boolean errorTolerance(double error, double tolerance) {
+	    	if (Math.abs(error) <= tolerance) {
+	    		return true;
+	    	}
+	    	else {
+	    		return false;
+	    	}
+	    }
 }

@@ -32,7 +32,7 @@ public class DriveConstants {
 //	Other Constants 
 	public static double kJoystickDeadband = 0.1;
 	
-	public static final double kRotationalEncoderTolerance = 0;
+	public static final double kRotationalEncoderTolerance = 200;
 	
 
 }

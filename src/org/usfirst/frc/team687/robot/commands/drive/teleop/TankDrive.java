@@ -1,4 +1,4 @@
-package org.usfirst.frc.team687.robot.commands;
+package org.usfirst.frc.team687.robot.commands.drive.teleop;
 
 import org.usfirst.frc.team687.robot.Robot;
 

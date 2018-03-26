@@ -1,7 +1,7 @@
 package org.usfirst.frc.team687.robot.subsystems;
 
 import org.usfirst.frc.team687.robot.RobotMap;
-import org.usfirst.frc.team687.robot.commands.TankDrive;
+import org.usfirst.frc.team687.robot.commands.drive.teleop.TankDrive;
 import org.usfirst.frc.team687.robot.constants.DriveConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -18,31 +18,42 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drive extends Subsystem {
 
-	private final TalonSRX m_leftMaster, m_leftSlave1;
-	private final TalonSRX m_rightMaster, m_rightSlave1;
+	private final TalonSRX m_leftMaster, m_leftSlave1, m_leftSlave2;
+	private final TalonSRX m_rightMaster, m_rightSlave1, m_rightSlave2;
 	private final AHRS m_nav;
 	private double m_previousDistance;
     private double m_currentX, m_currentY;
     
 	public Drive() {
+		
+		m_nav = new AHRS(SPI.Port.kMXP);
+		
 		m_leftMaster = new TalonSRX(RobotMap.kLeftMasterTalonSRXID);
 		m_leftSlave1 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX1ID);
+		m_leftSlave2 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX2ID);
+		
 		m_rightMaster = new TalonSRX(RobotMap.kRightMasterTalonSRXID);
 		m_rightSlave1 = new TalonSRX(RobotMap.kRightSlaveTalonSRX1ID);
+		m_rightSlave2 = new TalonSRX(RobotMap.kRightSlaveTalonSRX2ID);
+		
 		
 		m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		m_rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		
 		m_rightSlave1.follow(m_rightMaster);
-		m_leftSlave1.follow(m_leftMaster);
-		m_nav = new AHRS(SPI.Port.kMXP);
+		m_rightSlave2.follow(m_rightMaster);
 		
+		m_leftSlave1.follow(m_leftMaster);
+		m_leftSlave2.follow(m_leftMaster);
+				
 		m_leftMaster.setInverted(true);
 		m_leftSlave1.setInverted(true);
+		m_leftSlave2.setInverted(true);
 		
 		m_rightMaster.setInverted(false);
 		m_rightSlave1.setInverted(false);
-		
+		m_rightSlave2.setInverted(false)
+		;
 		m_leftMaster.setSensorPhase(true);
 		m_rightMaster.setSensorPhase(false);
 		
@@ -118,7 +129,7 @@ public class Drive extends Subsystem {
 	}
 	
 	
-	public double getYaw() {
+	public double getRawYaw() {
 		return m_nav.getYaw();
 	}
 	
@@ -129,7 +140,7 @@ public class Drive extends Subsystem {
 	public double getAngle() {
 //		converts angle from -180 to 180 to 0 to 360	
 //		sets positive y as 0 deg, robot's front is 0 deg
-		return (360 - getYaw()) % 360;
+		return (360 - getRawYaw()) % 360;
 		
 	}
 	
@@ -166,8 +177,7 @@ public class Drive extends Subsystem {
     public double getYpos() {
     	return m_currentY;
     }
-    
-    
+     
     public void reportToSmartDashboard() {
     	SmartDashboard.putNumber("Left Master Voltage", getLeftOutputVoltage());
     	SmartDashboard.putNumber("Right Master Voltage", getRightOutputVoltage());

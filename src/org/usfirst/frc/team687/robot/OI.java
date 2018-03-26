@@ -16,23 +16,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class OI {
 	
-	public Joystick lStick = new Joystick(0);
-	public Joystick rStick = new Joystick(1);
+	public Joystick leftStick;
+	public Joystick rightStick;
 	
 	public OI() {
-		
-		
+		leftStick = new Joystick(0);
+		rightStick = new Joystick(1);
 	}
 	
 	public double getLeftY() {
-		return lStick.getY();
+		return leftStick.getY();
 	}
 	
 	public double getRightY() {
-		return rStick.getY();
+		return rightStick.getY();
 	}
 	public double getRightX() {
-		return rStick.getX();
+		return rightStick.getX();
 	}
 	public void reportToSmartDashboard() {
 		SmartDashboard.putNumber("Left Stick Y", getLeftY());

@@ -15,6 +15,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team687.robot.subsystems.Drive;
 
+/**
+ * 
+ * @author dbarv
+ * Code heavily based on Tedklin's, 90% is based on stuff I've learned from him
+ *
+ */
 
 public class Robot extends TimedRobot {
 	public static PowerDistributionPanel pdp;
