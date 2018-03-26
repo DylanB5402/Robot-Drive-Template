@@ -28,7 +28,7 @@ public class FieldRelativeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	m_desiredAngle = Math.atan2(Robot.oi.getRightY(), Robot.oi.getRightX());
+    	m_desiredAngle = (Math.toDegrees(Math.atan2(Robot.oi.getRightY(), Robot.oi.getRightX())) - 90) * -1;
     	m_currentAngle = Robot.drive.getAngle();
     	m_error = -m_desiredAngle - m_currentAngle;
     	
