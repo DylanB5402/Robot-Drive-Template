@@ -17,7 +17,7 @@ public class TurnToAngleMotionMagic extends Command {
 	
     public TurnToAngleMotionMagic(double angle) {
     	m_desiredAngle = angle;
-       requires(Robot.drive);
+      	requires(Robot.drive);
     }
 
     // Called just before this Command runs the first time
@@ -38,8 +38,6 @@ public class TurnToAngleMotionMagic extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() { 
-    	m_error = -m_desiredAngle - Robot.drive.getAngle();
-    	Robot.drive.resetEncoders();
     	Robot.drive.setPositionMotionMagic(m_DesiredEncoderPosition, -m_DesiredEncoderPosition);    	
     }
 
@@ -56,5 +54,6 @@ public class TurnToAngleMotionMagic extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }

@@ -177,15 +177,18 @@ public class NerdyMath {
 	    }
 	    
 	    /**
-	     * 
 	     * @param angle
-	     * convert angles from gyro to encoder ticks needed to move the robot to that angle, based on drivetrain width
-	     * @return
+	     * @return encoder ticks necessary to turn wheels to the specified angle, based on the width of the drivetrain 
 	     */
 	    public static double angleToTicks(double angle) {
 	    	return Math.toRadians(angle) * 0.5 * inchesToTicks(DriveConstants.kDrivetrainWidth);
 	    }
 	    
+	    /**
+	     * @param error
+	     * @param tolerance
+	     * @return true if error is less than tolerance, false if otherwise
+	     */
 	    public static boolean errorTolerance(double error, double tolerance) {
 	    	if (Math.abs(error) <= tolerance) {
 	    		return true;
