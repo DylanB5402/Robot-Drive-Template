@@ -28,7 +28,7 @@ public class FieldRelativeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	m_desiredAngle = (Math.toDegrees(Math.atan2(Robot.oi.getRightY(), Robot.oi.getRightX())) - 90) * -1;
+    	m_desiredAngle = (Math.toDegrees(Math.atan2(Robot.oi.getRightY(), Robot.oi.getRightX())) - 90) * -1; //convert from radians to degrees, amd then from 0-360 to -180 to 180 so the PID loop can use it
     	m_currentAngle = Robot.drive.getAngle();
     	m_error = -m_desiredAngle - m_currentAngle;
     	
@@ -40,7 +40,7 @@ public class FieldRelativeDrive extends Command {
     	}
     	
     	m_rotPower = m_error * DriveConstants.kRotP;
-    	if (Robot.oi.isLeftTriggerPulled()){
+    	if (!Robot.oi.isLeftTriggerPulled()) {//If the trigger isn't pulled, straight power is limited at 0.7 to prevent power from saturating. This leaves enough power for the PID to take effect
     		m_straightPower = NerdyMath.threshold(Robot.oi.getLeftY(), 0, 0.7);
     	}
     	else {

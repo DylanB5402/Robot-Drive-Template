@@ -25,6 +25,10 @@ public class DriveConstants {
 	public static final double kMaxRotPower = 0.8;
 	public static final double kMinRotPower = 0;
 	
+//	Drive Constants, for driving straight
+	public static final double kDriveP = 0;
+	public static final double kDriveTolerance = 200;
+	
 //	Physical Robot Constants
 	public static double kWheelDiameter = 6;
 	public static double kDrivetrainWidth = 25;

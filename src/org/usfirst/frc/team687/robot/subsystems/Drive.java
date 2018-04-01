@@ -137,6 +137,10 @@ public class Drive extends Subsystem {
 		m_nav.reset();
 	}
 	
+	public double getAverageEncoderPosition() {
+		return (getRightMasterPosition() + getLeftMasterPosition())/2;
+	}
+	
 	public double getAngle() {
 //		converts angle from -180 to 180 to 0 to 360	
 //		sets positive y as 0 deg, robot's front is 0 deg
