@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team687.robot;
 
+import org.usfirst.frc.team687.robot.commands.drive.ResetDriveEncoders;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -22,10 +24,15 @@ public class OI {
 	public OI() {
 		leftStick = new Joystick(0);
 		rightStick = new Joystick(1);
+		SmartDashboard.putData("Reset Drive Encoders", new ResetDriveEncoders());
 	}
 	
 	public double getLeftY() {
 		return leftStick.getY();
+	}
+	
+	public double getLeftX() {
+		return leftStick.getX();
 	}
 	
 	public double getRightY() {
@@ -41,7 +48,7 @@ public class OI {
 	}
 	
 	public void reportToSmartDashboard() {
-		SmartDashboard.putNumber("Left Stick Y", getLeftY());
-		SmartDashboard.putNumber("Right Stick Y", getRightY());
+//		SmartDashboard.putNumber("Left Stick Y", getLeftY());
+//		SmartDashboard.putNumber("Right Stick Y", getRightY());
 	}
 }
