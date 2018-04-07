@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team687.robot.subsystems.Claw;
 import org.usfirst.frc.team687.robot.subsystems.Drive;
 
 /**
@@ -25,6 +27,7 @@ import org.usfirst.frc.team687.robot.subsystems.Drive;
 public class Robot extends TimedRobot {
 	public static PowerDistributionPanel pdp;
 	public static Drive drive;
+	public static Claw claw;
 	public static OI oi;
 
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -37,6 +40,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		pdp = new PowerDistributionPanel();
 		drive = new Drive();
+		claw = new Claw();
 		oi = new OI();
 		
 		

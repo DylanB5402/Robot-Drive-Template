@@ -7,7 +7,9 @@
 
 package org.usfirst.frc.team687.robot;
 
+import org.usfirst.frc.team687.robot.commands.claw.SetClawPosition;
 import org.usfirst.frc.team687.robot.commands.drive.ResetDriveEncoders;
+import org.usfirst.frc.team687.robot.constants.ClawConstants;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +27,7 @@ public class OI {
 		leftStick = new Joystick(0);
 		rightStick = new Joystick(1);
 		SmartDashboard.putData("Reset Drive Encoders", new ResetDriveEncoders());
+		SmartDashboard.putData("Stow Claw", new SetClawPosition(ClawConstants.kClawStowPosition));
 	}
 	
 	public double getLeftY() {
