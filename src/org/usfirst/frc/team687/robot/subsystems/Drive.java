@@ -21,6 +21,7 @@ public class Drive extends Subsystem {
 	private final TalonSRX m_leftMaster, m_leftSlave1, m_leftSlave2;
 	private final TalonSRX m_rightMaster, m_rightSlave1, m_rightSlave2;
 	private final AHRS m_nav;
+	
 	private double m_previousDistance;
     private double m_currentX, m_currentY;
     
@@ -57,12 +58,12 @@ public class Drive extends Subsystem {
 		m_leftMaster.setSensorPhase(true);
 		m_rightMaster.setSensorPhase(false);
 		
-		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);
-		m_leftMaster.config_kI(0, DriveConstants.kLeftI, 0);
-		m_leftMaster.config_kD(0, DriveConstants.kLeftD, 0);
-		m_leftMaster.config_kF(0, DriveConstants.kLeftF, 0);
+		m_rightMaster.config_kP(0, DriveConstants.kRightP, 0);
+		m_rightMaster.config_kI(0, DriveConstants.kRightI, 0);
+		m_rightMaster.config_kD(0, DriveConstants.kRightD, 0);
+		m_rightMaster.config_kF(0, DriveConstants.kRightF, 0);
 		
-		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);
+		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);//CHANGE THESE TO RIGHT
 		m_leftMaster.config_kI(0, DriveConstants.kLeftI, 0);
 		m_leftMaster.config_kD(0, DriveConstants.kLeftD, 0);
 		m_leftMaster.config_kF(0, DriveConstants.kLeftF, 0);
@@ -158,7 +159,7 @@ public class Drive extends Subsystem {
 	}
 	
     public void calcXY() {
-    	// calculate x,y coordinates when moving in straight lines and turning in place, DOES NOT WORK WITH CURVES (yet)
+    	// calculate x,y coordinates when moving in straight lines and turning in place, DOES NOT WORK
     	double m_currentDistance = (getRightMasterPosition() + getLeftMasterPosition())/2;
     	double m_distanceTraveled = (m_currentDistance - m_previousDistance);
     	double angle = getAngle();

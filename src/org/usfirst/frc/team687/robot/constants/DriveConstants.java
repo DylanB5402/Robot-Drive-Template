@@ -24,6 +24,7 @@ public class DriveConstants {
 	public static final double kDriveRotationTolerance = 0;
 	public static final double kMaxRotPower = 0.8;
 	public static final double kMinRotPower = 0;
+	public static final double kRotationalEncoderTolerance = 200;
 	
 //	Drive Constants, for driving straight
 	public static final double kDriveP = 0;
@@ -36,7 +37,7 @@ public class DriveConstants {
 //	Other Constants 
 	public static double kJoystickDeadband = 0.1;
 	
-	public static final double kRotationalEncoderTolerance = 200;
+	
 	
 
 }
