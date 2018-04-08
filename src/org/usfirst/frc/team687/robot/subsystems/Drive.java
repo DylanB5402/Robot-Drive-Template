@@ -1,6 +1,7 @@
 package org.usfirst.frc.team687.robot.subsystems;
 
 import org.usfirst.frc.team687.robot.RobotMap;
+import org.usfirst.frc.team687.robot.commands.drive.teleop.ArcadeDrive;
 import org.usfirst.frc.team687.robot.commands.drive.teleop.TankDrive;
 import org.usfirst.frc.team687.robot.constants.DriveConstants;
 
@@ -51,11 +52,11 @@ public class Drive extends Subsystem {
 		m_leftSlave1.setInverted(true);
 		m_leftSlave2.setInverted(true);
 		
-		m_rightMaster.setInverted(false);
-		m_rightSlave1.setInverted(false);
-		m_rightSlave2.setInverted(false)
+		m_rightMaster.setInverted(true);
+		m_rightSlave1.setInverted(true);
+		m_rightSlave2.setInverted(true)
 		;
-		m_leftMaster.setSensorPhase(true);
+		m_leftMaster.setSensorPhase(false);
 		m_rightMaster.setSensorPhase(false);
 		
 		m_rightMaster.config_kP(0, DriveConstants.kRightP, 0);
@@ -150,7 +151,7 @@ public class Drive extends Subsystem {
 	}
 	
     public void initDefaultCommand() {
-        setDefaultCommand(new TankDrive());
+        setDefaultCommand(new ArcadeDrive());
     }   
     
 	public void resetXY() {
@@ -189,6 +190,8 @@ public class Drive extends Subsystem {
     	
     	SmartDashboard.putNumber("Left Master Position", getLeftMasterPosition());
     	SmartDashboard.putNumber("Right Master Position", getRightMasterPosition());
+    	
+    	SmartDashboard.putNumber("Yaw", getRawYaw());
     	
     }
     
