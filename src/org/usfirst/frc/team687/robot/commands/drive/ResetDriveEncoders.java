@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ResetDriveEncoders extends Command {
 
     public ResetDriveEncoders() {
-        requires(Robot.drive);
+       requires(Robot.drive);
     }
 
     // Called just before this Command runs the first time
@@ -25,12 +25,11 @@ public class ResetDriveEncoders extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return Robot.drive.getAverageEncoderPosition() == 0;
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.drive.resetEncoders();
     }
 
     // Called when another command which requires one or more of the same

@@ -172,16 +172,9 @@ public class Drive extends Subsystem {
     	// calculate x,y coordinates when moving in straight lines and turning in place, DOES NOT WORK
     	double m_currentDistance = (getRightMasterPosition() + getLeftMasterPosition())/2;
     	double m_distanceTraveled = (m_currentDistance - m_previousDistance);
-    	double angle = getAngle();
-  
-//    	If positive y axis is 0 deg
-//    	m_currentX = m_currentX + m_distanceTraveled * Math.sin(Math.toRadians(angle));
-//    	m_currentY = m_currentY + m_distanceTraveled * Math.cos(Math.toRadians(angle));
-    	
-//    	if positive x axis is 0 deg
-    	m_currentX = m_currentX + m_distanceTraveled * Math.cos(Math.toRadians(angle));
-    	m_currentY = m_currentY + m_distanceTraveled * Math.sin(Math.toRadians(angle));
-
+    	double angle = getRawYaw();
+    	m_currentX = m_currentX + m_distanceTraveled * Math.sin(Math.toRadians(angle));
+    	m_currentY = m_currentY + m_distanceTraveled * Math.cos(Math.toRadians(angle));
     	m_previousDistance = m_currentDistance;
     }
     
