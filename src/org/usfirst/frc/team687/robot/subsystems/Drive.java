@@ -7,6 +7,7 @@ import org.usfirst.frc.team687.robot.constants.DriveConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -74,7 +75,15 @@ public class Drive extends Subsystem {
 		
 		m_rightMaster.configMotionAcceleration(DriveConstants.kRightAcceleration, 0);
 		m_rightMaster.configMotionCruiseVelocity(DriveConstants.kRightCruiseVelocity, 0);
-			
+		
+		m_leftMaster.setNeutralMode(NeutralMode.Brake);
+		m_leftSlave1.setNeutralMode(NeutralMode.Brake);
+		m_leftSlave2.setNeutralMode(NeutralMode.Brake);
+		
+		m_rightMaster.setNeutralMode(NeutralMode.Brake);
+		m_rightSlave1.setNeutralMode(NeutralMode.Brake);
+		m_rightSlave2.setNeutralMode(NeutralMode.Brake);
+		
 	}
 	
 	public void setPower(double leftPower, double rightPower) {
