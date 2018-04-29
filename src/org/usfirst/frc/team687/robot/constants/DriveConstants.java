@@ -1,5 +1,7 @@
 package org.usfirst.frc.team687.robot.constants;
 
+import org.usfirst.frc.team687.robot.utilities.BezierCurve;
+
 public class DriveConstants {
 //	TalonSRX Constants
 	public static final double kLeftP = 0;
@@ -37,6 +39,8 @@ public class DriveConstants {
 //	Other Constants 
 	public static double kJoystickDeadband = 0.1;
 	
+	public static double kMinDistToBezierPoint = 100; //distance to target point at bezier curve where robot changes target to nect point
+//	public static BezierCurve kTestCurveStraight = new BezierCurve()
 	
 	
 

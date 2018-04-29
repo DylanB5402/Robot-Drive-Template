@@ -39,8 +39,7 @@ public class DriveToPose extends Command {
     protected void execute() {
     	m_currentX = Robot.drive.getXpos();
     	m_currentY = Robot.drive.getYpos();
-    	m_desiredAngle = Math.atan2(m_currentY, m_currentX);
-    	m_desiredAngle = -((m_desiredAngle -270) % 360) + 180;
+    	m_desiredAngle = Math.atan2(m_desiredX - m_currentX, m_desiredY - m_currentY);
     	m_rotationalError = -m_desiredAngle - Robot.drive.getAngle();
     	m_rotationalPower = m_rotationalError * DriveConstants.kRotP;
     	m_rotationalPower = NerdyMath.threshold(m_rotationalPower, 0, 0.5);
@@ -63,7 +62,7 @@ public class DriveToPose extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return NerdyMath.errorTolerance(m_straightError, DriveConstants.kDriveTolerance) && NerdyMath.errorTolerance(m_rotationalError, m_rotationalError);
+        return NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY) < DriveConstants.kMinDistToBezierPoint;
     }
 
     // Called once after isFinished returns true
