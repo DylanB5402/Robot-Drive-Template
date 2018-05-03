@@ -21,6 +21,7 @@ public class DriveToPose extends Command {
 	private double m_currentX;
 	private double m_currentY;
 	private boolean m_useStraightPID;
+	private double m_direction;
 	
     public DriveToPose(double x, double y, double straightPower, boolean useStraightPID) {
     	m_desiredX = x;
@@ -32,7 +33,9 @@ public class DriveToPose extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	m_direction = Math.signum(m_straightPower);
+    	m_currentX = Robot.drive.getXpos();
+    	m_currentY = Robot.drive.getYpos(); 	
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -40,9 +43,12 @@ public class DriveToPose extends Command {
     	m_currentX = Robot.drive.getXpos();
     	m_currentY = Robot.drive.getYpos();
     	m_desiredAngle = Math.atan2(m_desiredX - m_currentX, m_desiredY - m_currentY);
+    	if (m_direction == -1) {
+    		m_desiredAngle += 180;
+    	}
     	m_rotationalError = -m_desiredAngle - Robot.drive.getAngle();
     	m_rotationalPower = m_rotationalError * DriveConstants.kRotP;
-    	m_rotationalPower = NerdyMath.threshold(m_rotationalPower, 0, 0.5);
+//    	m_rotationalPower = NerdyMath.threshold(m_rotationalPower, 0, 0.5);
     	if (m_rotationalError >= 180) {
     		m_rotationalError -= 360;
     	}
@@ -53,7 +59,7 @@ public class DriveToPose extends Command {
     	if (m_useStraightPID) {
     		m_straightError = NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY);
         	m_straightPower = m_straightError * DriveConstants.kDriveP;
-        	m_straightPower = NerdyMath.threshold(m_straightPower, 0, 0.5);
+//        	m_straightPower = NerdyMath.threshold(m_straightPower, 0, 0.5);
     	}
   
     	Robot.drive.setPower(m_straightPower - m_rotationalPower, m_straightPower + m_rotationalPower);
@@ -67,11 +73,12 @@ public class DriveToPose extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	
+    	Robot.drive.setPowerZero();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	end();
     }
 }
