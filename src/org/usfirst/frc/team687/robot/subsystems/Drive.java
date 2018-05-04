@@ -1,5 +1,12 @@
 package org.usfirst.frc.team687.robot.subsystems;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.usfirst.frc.team687.robot.Robot;
 import org.usfirst.frc.team687.robot.RobotMap;
 import org.usfirst.frc.team687.robot.commands.drive.teleop.ArcadeDrive;
 import org.usfirst.frc.team687.robot.commands.drive.teleop.TankDrive;
@@ -12,6 +19,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,6 +34,13 @@ public class Drive extends Subsystem {
 	
 	private double m_previousDistance;
     private double m_currentX, m_currentY;
+    
+    private String m_filePath1 = "/media/sda1/logs/";
+    private String m_filePath2 = "/home/lvuser/logs/";
+    private File m_file;
+    public FileWriter m_writer;
+    private boolean writeException = false;
+    private double m_logStartTime = 0;
     
 	public Drive() {
 		
@@ -194,8 +209,82 @@ public class Drive extends Subsystem {
     	SmartDashboard.putNumber("Right Master Position", getRightMasterPosition());
     	
     	SmartDashboard.putNumber("Yaw", getRawYaw());
+    	SmartDashboard.putNumber("X pos", m_currentX);
+    	SmartDashboard.putNumber("Y pos", m_currentY);
+    	
     	
     }
     
+    public void startLog() {
+		writeException = false;
+		// Check to see if flash drive is mounted.
+		File logFolder1 = new File(m_filePath1);
+		File logFolder2 = new File(m_filePath2);
+		Path filePrefix = Paths.get("");
+		if (logFolder1.exists() && logFolder1.isDirectory())
+			filePrefix = Paths.get(logFolder1.toString(), "2018_03_03_Drive");
+		else if (logFolder2.exists() && logFolder2.isDirectory())
+			filePrefix = Paths.get(logFolder2.toString(),
+					SmartDashboard.getString("log_file_name", "2018_03_03_Drive"));
+		else
+			writeException = true;
+
+		if (!writeException) {
+			int counter = 0;
+			while (counter <= 99) {
+				m_file = new File(filePrefix.toString() + String.format("%02d", counter) + ".csv");
+				if (m_file.exists()) {
+					counter++;
+				} else {
+					break;
+				}
+				if (counter == 99) {
+					System.out.println("file creation counter at 99!");
+				}
+			}
+			try {
+				m_writer = new FileWriter(m_file);
+				m_writer.append("Time,RightPosition,LeftPosition,RightVelocity,LeftVelocity,RightDesiredVel,LeftDesiredVel,RightVoltage,LeftVoltage,"
+						+ "RightMasterCurrent,LeftMasterCurrent,RightSlaveCurrent,LeftSlaveCurrent,BusVoltage,Yaw\n");
+				m_writer.flush();
+				m_logStartTime = Timer.getFPGATimestamp();
+			} catch (IOException e) {
+				e.printStackTrace();
+				writeException = true;
+			}
+		}
+	}
+
+	public void stopLog() {
+		try {
+			if (null != m_writer)
+				m_writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			writeException = true;
+		}
+	}
+
+	public void logToCSV() {
+		if (!writeException) {
+			try {
+				double timestamp = Timer.getFPGATimestamp() - m_logStartTime;
+//				m_writer.append(String.valueOf(timestamp) + "," + String.valueOf(getRightPosition()) + ","
+//						+ String.valueOf(getLeftPosition()) + "," + String.valueOf(getRightSpeed()) + ","
+//						+ String.valueOf(getLeftSpeed()) + "," + String.valueOf(m_rightDesiredVel) + "," + String.valueOf(m_leftDesiredVel)
+//						+ "," + String.valueOf(m_rightMaster.getMotorOutputVoltage())
+//						+ "," + String.valueOf(m_leftMaster.getMotorOutputVoltage()) + ","
+//						+ String.valueOf(m_rightMaster.getOutputCurrent()) + ","
+//						+ String.valueOf(m_leftMaster.getOutputCurrent()) + ","
+//						+ String.valueOf(m_rightSlave1.getOutputCurrent()) + ","
+//						+ String.valueOf(m_leftSlave1.getOutputCurrent()) + "," + String.valueOf(Robot.pdp.getVoltage()) + ","
+//						+ String.valueOf(getCurrentYaw()) + "\n");
+				m_writer.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+				writeException = true;
+			}
+		}
+	}
 }
 
