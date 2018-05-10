@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class DriveToPose extends Command {
+public class DriveToXY extends Command {
 
 	private double m_desiredX;
 	private double m_desiredY;
@@ -23,7 +23,7 @@ public class DriveToPose extends Command {
 	private boolean m_useStraightPID;
 	private double m_direction;
 	
-    public DriveToPose(double x, double y, double straightPower, boolean useStraightPID) {
+    public DriveToXY(double x, double y, double straightPower, boolean useStraightPID) {
     	m_desiredX = x;
     	m_desiredY = y;
     	m_useStraightPID = useStraightPID;

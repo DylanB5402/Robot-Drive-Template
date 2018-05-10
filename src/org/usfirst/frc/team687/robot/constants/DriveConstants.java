@@ -41,7 +41,6 @@ public class DriveConstants {
 	
 	public static double kMinDistToBezierPoint = 100; //distance to target point at bezier curve where robot changes target to nect point
 //	public static BezierCurve kTestCurveStraight = new BezierCurve()
+	public static double kMaximumTurnRadius = 50;
 	
-	
-
 }

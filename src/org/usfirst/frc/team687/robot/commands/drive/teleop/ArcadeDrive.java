@@ -27,7 +27,6 @@ public class ArcadeDrive extends Command {
     	m_rightPower = Robot.oi.getLeftX() + Robot.oi.getRightY();
     	
     	Robot.drive.setPower(m_leftPower, m_rightPower);
-    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

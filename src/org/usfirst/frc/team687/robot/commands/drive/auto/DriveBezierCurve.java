@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *Tedklin's DriveBezierPath adapted to use the robot's pose instead of encoder and yaw
  */
-public class FollowBezierCurve extends Command {
+public class DriveBezierCurve extends Command {
 	
 	
 	private BezierCurve m_curve;
@@ -34,7 +34,7 @@ public class FollowBezierCurve extends Command {
 	 * @param straightPower = positive is forwards, negative for backwards
 	 * @param useStraightPID =
 	 */
-    public FollowBezierCurve(BezierCurve curve, double straightPower, boolean useStraightPID) {
+    public DriveBezierCurve(BezierCurve curve, double straightPower, boolean useStraightPID) {
     	m_curve = curve;
     	m_straightPower = straightPower;
     	m_useStraightPID = useStraightPID;
