@@ -18,16 +18,24 @@ public class BezierCurve {
 	private double m_t;
 	private double m_angle;
 	private double m_a;
-	private double[] t_list;
-	private	double[] m_xList;
-	private double[] m_yList;
-	private double[] m_angleList;
+	private ArrayList<Double> m_tList;
+	private	ArrayList<Double> m_xList;
+	private ArrayList<Double> m_yList;
+	private ArrayList<Double> m_angleList;
+	private ArrayList<Double> m_slopeList;
+	private ArrayList<Double> m_yInterceptList;
+	private ArrayList<Double> m_perpendicularSlopeList;
+	private ArrayList<Double> m_hypotenuseList;
+	private ArrayList<Double> m_deltaXList;
 	private double m_deltaX;
 	private double m_deltaY;
 	private double m_prevX;
 	private double m_prevY;
-	private double m_distance = 0;
+	private double m_distance;
 	private double m_hypotenuse;
+	private double m_slope;
+	private double m_yIntercept;
+	private double m_perpendicularSlope;
 	
 	/*
 	 * 
@@ -45,6 +53,7 @@ public class BezierCurve {
 	}
 	
 	public void generateCurve() {
+		m_distance = 0;
 		m_hypotenuse = 0;
 		m_prevX = 0;
 		m_prevY = 0;
@@ -57,29 +66,78 @@ public class BezierCurve {
             m_angle = Math.atan2(m_deltaX, m_deltaY);
             m_angle = Math.toDegrees(m_angle);
             m_hypotenuse = NerdyMath.distanceFormula(m_x, m_y, m_prevX, m_prevY);
+            if (m_deltaX != 0) {
+            	m_slope = m_deltaY/m_deltaX;
+            }
+            else {
+            	m_slope = 0;
+            }
+            m_yIntercept = m_y - m_slope * m_x;
+            if (m_slope != 0) {
+            	m_perpendicularSlope = -Math.pow(m_slope, -1);
+            	
+            }
+            else {
+            	m_perpendicularSlope = 0;
+            }
             m_distance += m_hypotenuse;
-            
+            m_tList.add(m_t);
+            m_xList.add(m_x);
+            m_angleList.add(m_angle);
+            m_slopeList.add(m_slope);
+            m_yInterceptList.add(m_yIntercept);
+            m_perpendicularSlopeList.add(m_perpendicularSlope);
+            m_hypotenuseList.add(m_hypotenuse);
+            m_deltaXList.add(m_deltaX);
+            m_prevX = m_x;
+            m_prevY = m_y;
+            m_a += 1;
+         
 		}
 	}
 	
-	public double[] getXList() {
+	public ArrayList<Double> getXList() {
 		return m_xList;
 	}
 	
-	public double[] getYList() {
+	public ArrayList<Double> getYList() {
 		return m_yList;
 	}
 	
-	public double[] getAngleList() {
+	public ArrayList<Double> getAngleList() {
 		return m_angleList;
 	}
 	
-	public double getX(int x) {
-		return m_xList[x];
+	public double getX(int t) {
+		return m_xList.get(t);
 	}
 	
-	public double getY(int y) {
-		return m_yList[y];
+	public double getY(int t) {
+		return m_yList.get(t);
+	}
+	
+	public double getAngle(int t) {
+		return m_angleList.get(t);
+	}
+	
+	public double getSlope(int t) {
+		return m_slopeList.get(t);
+	}
+	
+	public double getYIntercept(int t) {
+		return m_yInterceptList.get(t);
+	}
+	
+	public double getPerpendicularSlope(int t) {
+		return m_perpendicularSlopeList.get(t);
+	}
+	
+	public double getHypotenuse(int t) {
+		return m_hypotenuseList.get(t);
+	}
+	
+	public double getDeltaX(int t) {
+		return m_deltaXList.get(t);
 	}
 	
 	public double getCurveLength() {
@@ -87,10 +145,10 @@ public class BezierCurve {
 	}
 	
 	public double getLastX() {
-		return m_xList[(int) Math.round(m_step) - 1];
+		return m_xList.get((int) Math.round(m_step));
 	}
 	
 	public double getLastY() {
-		return m_yList[(int) Math.round(m_step) - 1];
+		return m_yList.get((int) Math.round(m_step));
 	}
 }
