@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * Implementation of 3184's radius turn, based off of this whitepaper
  * https://www.chiefdelphi.com/media/papers/3398
  * Planning on implementing this for pure pursuit sometime in the next 50000 years
+ * (we'll have pure pursuit when there's a water game)
  */
 public class RadiusDrive extends Command {
 

@@ -48,7 +48,6 @@ public class DriveToXY extends Command {
     	}
     	m_rotationalError = -m_desiredAngle - Robot.drive.getAngle();
     	m_rotationalPower = m_rotationalError * DriveConstants.kRotP;
-//    	m_rotationalPower = NerdyMath.threshold(m_rotationalPower, 0, 0.5);
     	if (m_rotationalError >= 180) {
     		m_rotationalError -= 360;
     	}
@@ -59,7 +58,6 @@ public class DriveToXY extends Command {
     	if (m_useStraightPID) {
     		m_straightError = NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY);
         	m_straightPower = m_straightError * DriveConstants.kDriveP;
-//        	m_straightPower = NerdyMath.threshold(m_straightPower, 0, 0.5);
     	}
   
     	Robot.drive.setPower(m_straightPower - m_rotationalPower, m_straightPower + m_rotationalPower);

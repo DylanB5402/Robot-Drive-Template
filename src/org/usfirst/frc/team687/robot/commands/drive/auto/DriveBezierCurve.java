@@ -72,7 +72,7 @@ public class DriveBezierCurve extends Command {
     	m_rotationalPower = m_rotationalError * DriveConstants.kRotP;   	
     	
     	if (m_useStraightPID) {
-    		m_straightError = m_curve.getCurveLength() - (Robot.drive.getLeftMasterPosition() + Robot.drive.getRightMasterPosition())/2;
+    		m_straightError = m_curve.getCurveLength() - Robot.drive.getAverageEncoderPosition();
         	m_straightPower = m_straightError * DriveConstants.kDriveP;
     	}  
     	

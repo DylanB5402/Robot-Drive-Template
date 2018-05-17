@@ -18,15 +18,15 @@ public class BezierCurve {
 	private double m_t;
 	private double m_angle;
 	private double m_a;
-	private ArrayList<Double> m_tList;
-	private	ArrayList<Double> m_xList;
-	private ArrayList<Double> m_yList;
-	private ArrayList<Double> m_angleList;
-	private ArrayList<Double> m_slopeList;
-	private ArrayList<Double> m_yInterceptList;
-	private ArrayList<Double> m_perpendicularSlopeList;
-	private ArrayList<Double> m_hypotenuseList;
-	private ArrayList<Double> m_deltaXList;
+	private ArrayList<Double> m_tList = new ArrayList<Double>();
+	private	ArrayList<Double> m_xList = new ArrayList<Double>();
+	private ArrayList<Double> m_yList = new ArrayList<Double>();
+	private ArrayList<Double> m_angleList = new ArrayList<Double>();
+	private ArrayList<Double> m_slopeList = new ArrayList<Double>();
+	private ArrayList<Double> m_yInterceptList = new ArrayList<Double>();
+	private ArrayList<Double> m_perpendicularSlopeList = new ArrayList<Double>();
+	private ArrayList<Double> m_hypotenuseList = new ArrayList<Double>();
+	private ArrayList<Double> m_deltaXList = new ArrayList<Double>();
 	private double m_deltaX;
 	private double m_deltaY;
 	private double m_prevX;
@@ -57,6 +57,7 @@ public class BezierCurve {
 		m_hypotenuse = 0;
 		m_prevX = 0;
 		m_prevY = 0;
+		m_t = 0;
 		while (m_t != 1) {
 			m_t = m_a/m_step;
 			m_x = (m_x0 * Math.pow((1-m_t), 3)) + (3 * m_x1 * m_t * Math.pow((1-m_t), 2)) + (3 * m_x2 * (1-m_t) * Math.pow(m_t, 2)) + (m_x3 * Math.pow(m_t, 3));               
@@ -83,6 +84,7 @@ public class BezierCurve {
             m_distance += m_hypotenuse;
             m_tList.add(m_t);
             m_xList.add(m_x);
+            m_yList.add(m_y);
             m_angleList.add(m_angle);
             m_slopeList.add(m_slope);
             m_yInterceptList.add(m_yIntercept);
@@ -145,10 +147,21 @@ public class BezierCurve {
 	}
 	
 	public double getLastX() {
-		return m_xList.get((int) Math.round(m_step));
+		if (m_xList.size() > 0) {
+			return m_xList.get((int) Math.round(m_step));
+		}
+		else {
+			return 0;
+		}
 	}
 	
 	public double getLastY() {
-		return m_yList.get((int) Math.round(m_step));
+		if (m_yList.size() > 0) {
+			return m_yList.get((int) Math.round(m_step));
+		}
+		else {
+			return 0;
+		}
 	}
 }
+
