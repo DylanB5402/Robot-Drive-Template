@@ -11,11 +11,10 @@ import org.usfirst.frc.team687.robot.RobotMap;
 import org.usfirst.frc.team687.robot.commands.drive.teleop.ArcadeDrive;
 import org.usfirst.frc.team687.robot.commands.drive.teleop.TankDrive;
 import org.usfirst.frc.team687.robot.constants.DriveConstants;
-
+import org.usfirst.frc.team687.robot.utilities.NerdyTalon;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -28,8 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drive extends Subsystem {
 
-	private final TalonSRX m_leftMaster, m_leftSlave1, m_leftSlave2;
-	private final TalonSRX m_rightMaster, m_rightSlave1, m_rightSlave2;
+	private final NerdyTalon m_leftMaster, m_leftSlave1, m_leftSlave2;
+	private final NerdyTalon m_rightMaster, m_rightSlave1, m_rightSlave2;
 	private final AHRS m_nav;
 	
 	private double m_previousDistance;
@@ -46,13 +45,13 @@ public class Drive extends Subsystem {
 		
 		m_nav = new AHRS(SPI.Port.kMXP);
 		
-		m_leftMaster = new TalonSRX(RobotMap.kLeftMasterTalonSRXID);
-		m_leftSlave1 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX1ID);
-		m_leftSlave2 = new TalonSRX(RobotMap.kLeftSlaveTalonSRX2ID);
+		m_leftMaster = new NerdyTalon(RobotMap.kLeftMasterTalonSRXID);
+		m_leftSlave1 = new NerdyTalon(RobotMap.kLeftSlaveTalonSRX1ID);
+		m_leftSlave2 = new NerdyTalon(RobotMap.kLeftSlaveTalonSRX2ID);
 		
-		m_rightMaster = new TalonSRX(RobotMap.kRightMasterTalonSRXID);
-		m_rightSlave1 = new TalonSRX(RobotMap.kRightSlaveTalonSRX1ID);
-		m_rightSlave2 = new TalonSRX(RobotMap.kRightSlaveTalonSRX2ID);
+		m_rightMaster = new NerdyTalon(RobotMap.kRightMasterTalonSRXID);
+		m_rightSlave1 = new NerdyTalon(RobotMap.kRightSlaveTalonSRX1ID);
+		m_rightSlave2 = new NerdyTalon(RobotMap.kRightSlaveTalonSRX2ID);
 		
 		
 		m_leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
@@ -75,22 +74,12 @@ public class Drive extends Subsystem {
 		m_leftMaster.setSensorPhase(false);
 		m_rightMaster.setSensorPhase(false);
 		
-		m_rightMaster.config_kP(0, DriveConstants.kRightP, 0);
-		m_rightMaster.config_kI(0, DriveConstants.kRightI, 0);
-		m_rightMaster.config_kD(0, DriveConstants.kRightD, 0);
-		m_rightMaster.config_kF(0, DriveConstants.kRightF, 0);
-		
-		m_leftMaster.config_kP(0, DriveConstants.kLeftP, 0);//CHANGE THESE TO RIGHT
-		m_leftMaster.config_kI(0, DriveConstants.kLeftI, 0);
-		m_leftMaster.config_kD(0, DriveConstants.kLeftD, 0);
-		m_leftMaster.config_kF(0, DriveConstants.kLeftF, 0);
-		
-		m_leftMaster.configMotionAcceleration(DriveConstants.kLeftAcceleration, 0);
-		m_leftMaster.configMotionCruiseVelocity(DriveConstants.kLeftCruiseVelocity, 0);
-		
-		m_rightMaster.configMotionAcceleration(DriveConstants.kRightAcceleration, 0);
-		m_rightMaster.configMotionCruiseVelocity(DriveConstants.kRightCruiseVelocity, 0);
-		
+		m_rightMaster.configPIDF(DriveConstants.kRightP, DriveConstants.kRightI, DriveConstants.kRightD, DriveConstants.kRightF, 0);
+		m_leftMaster.configPIDF(DriveConstants.kLeftP, DriveConstants.kLeftI, DriveConstants.kLeftD, DriveConstants.kLeftF, 0);
+
+		m_leftMaster.configMotionMagic(DriveConstants.kLeftAcceleration, DriveConstants.kLeftCruiseVelocity);
+		m_rightMaster.configMotionMagic(DriveConstants.kRightAcceleration, DriveConstants.kRightCruiseVelocity);
+
 		m_leftMaster.setNeutralMode(NeutralMode.Brake);
 		m_leftSlave1.setNeutralMode(NeutralMode.Brake);
 		m_leftSlave2.setNeutralMode(NeutralMode.Brake);
@@ -98,6 +87,7 @@ public class Drive extends Subsystem {
 		m_rightMaster.setNeutralMode(NeutralMode.Brake);
 		m_rightSlave1.setNeutralMode(NeutralMode.Brake);
 		m_rightSlave2.setNeutralMode(NeutralMode.Brake);
+
 		
 	}
 	
@@ -115,6 +105,11 @@ public class Drive extends Subsystem {
 	public void setPositionMotionMagic(double leftPosition, double rightPosition) {
 		m_leftMaster.set(ControlMode.MotionMagic, leftPosition);
 		m_rightMaster.set(ControlMode.MotionMagic, rightPosition);
+	}
+	
+	public void setVelocity(double leftVel, double rightVel) {
+		m_rightMaster.set(ControlMode.Velocity, rightVel);
+		m_leftMaster.set(ControlMode.Velocity, leftVel);
 	}
 	
 	public void resetEncoders() {
