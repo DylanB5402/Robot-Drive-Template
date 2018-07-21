@@ -4,30 +4,14 @@ import java.util.ArrayList;
 import org.usfirst.frc.team687.robot.utilities.NerdyMath;
 
 public class BezierCurve {
-	private double m_x0;
-	private double m_y0;
-	private double m_x1;
-	private double m_y1;
-	private double m_x2;
-	private double m_y2;
-	private double m_x3;
-	private double m_y3;
-	private double m_step;
-	private double m_x;
-	private double m_y;
-	private double m_t;
-	private double m_angle;
-	private double m_a;
+	private double m_x0, m_x1, m_x2, m_x3;
+	private double m_y0, m_y1, m_y2, m_y3;
+	private double m_step, m_x, m_y, m_t, m_angle, m_a;	 
 	private ArrayList<Double> m_tList = new ArrayList<Double>();
 	private	ArrayList<Double> m_xList = new ArrayList<Double>();
 	private ArrayList<Double> m_yList = new ArrayList<Double>();
 	private ArrayList<Double> m_angleList = new ArrayList<Double>();
-	private double m_deltaX;
-	private double m_deltaY;
-	private double m_prevX;
-	private double m_prevY;
-	private double m_distance;
-	private double m_hypotenuse;
+	private double m_deltaX, m_deltaY, m_prevX, m_prevY, m_distance, m_hypotenuse;
 
 	
 	/*
@@ -43,7 +27,6 @@ public class BezierCurve {
 		m_x3 = x3;
 		m_y3 = y3;
 		m_step = step;
-		NerdyMath.addSensitivity(1, 1);
 	}
 	
 	public void generateCurve() {

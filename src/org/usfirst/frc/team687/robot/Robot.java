@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void disabledInit() {
+		Robot.drive.calcXY();
 		Robot.drive.reportToSmartDashboard();
 		Robot.oi.reportToSmartDashboard();
 		SmartDashboard.putData(pdp);
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		Robot.drive.calcXY();
 		Scheduler.getInstance().run();
 		Robot.drive.reportToSmartDashboard();
 		Robot.oi.reportToSmartDashboard();
@@ -67,7 +69,7 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void autonomousInit() {
-		
+		Robot.drive.calcXY();	
 	}
 
 	/**
@@ -76,12 +78,14 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		Robot.drive.calcXY();
 	}
 
 	@Override
 	public void teleopInit() {
 		Robot.drive.reportToSmartDashboard();
 		Robot.oi.reportToSmartDashboard();
+		Robot.drive.calcXY();
 		SmartDashboard.putData(pdp);
 		
 		
@@ -93,6 +97,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		Robot.drive.calcXY();
 		Robot.drive.reportToSmartDashboard();
 		Robot.oi.reportToSmartDashboard();
 		SmartDashboard.putData(pdp);
@@ -104,6 +109,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		Robot.drive.calcXY();
 		Robot.drive.reportToSmartDashboard();
 		Robot.oi.reportToSmartDashboard();
 		SmartDashboard.putData(pdp);

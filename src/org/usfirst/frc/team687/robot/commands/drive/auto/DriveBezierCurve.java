@@ -13,29 +13,20 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveBezierCurve extends Command {
 	
 	
-	private BezierCurve m_curve;
-	private double m_straightPower;
-	private boolean m_useStraightPID;
-	private double m_currentX;
-	private double m_currentY;
+	private BezierCurve m_path;
+	private double m_straightPower, m_currentX, m_currentY, m_desiredX, m_desiredY, m_distanceToPoint;
+	private double m_desiredAngle, m_rotationalError, m_rotationalPower, m_angle, m_straightError, m_direction;
 	private int m_t;
-	private double m_desiredX;
-	private double m_desiredY;
-	private double m_distanceToPoint;
-	private double m_desiredAngle;
-	private double m_rotationalError;
-	private double m_rotationalPower;
-	private double m_angle;
-	private double m_straightError;
-	private double m_direction;
+	private boolean m_useStraightPID;
 	/**
 	 * 
-	 * @param curve = Bezier Curve to follow
+	 * @param path = Bezier Curve to follow
 	 * @param straightPower = positive is forwards, negative for backwards
 	 * @param useStraightPID =
 	 */
-    public DriveBezierCurve(BezierCurve curve, double straightPower, boolean useStraightPID) {
-    	m_curve = curve;
+	
+    public DriveBezierCurve(BezierCurve path, double straightPower, boolean useStraightPID) {
+    	m_path = path;
     	m_straightPower = straightPower;
     	m_useStraightPID = useStraightPID;
         requires(Robot.drive);
@@ -53,8 +44,8 @@ public class DriveBezierCurve extends Command {
     protected void execute() {
     	m_currentX = Robot.drive.getXpos();
     	m_currentY = Robot.drive.getYpos();
-    	m_desiredX = m_curve.getX(m_t);
-    	m_desiredY = m_curve.getY(m_t);
+    	m_desiredX = m_path.getX(m_t);
+    	m_desiredY = m_path.getY(m_t);
     	m_distanceToPoint = NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_currentY);
     	m_desiredAngle = Math.atan2(m_desiredX - m_currentX, m_desiredY - m_currentY);
     	if (m_direction == -1) {
@@ -72,7 +63,7 @@ public class DriveBezierCurve extends Command {
     	m_rotationalPower = m_rotationalError * DriveConstants.kRotP;   	
     	
     	if (m_useStraightPID) {
-    		m_straightError = m_curve.getCurveLength() - Robot.drive.getAverageEncoderPosition();
+    		m_straightError = m_path.getCurveLength() - Robot.drive.getAverageEncoderPosition();
         	m_straightPower = m_straightError * DriveConstants.kDriveP;
     	}  
     	
@@ -85,7 +76,7 @@ public class DriveBezierCurve extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return m_desiredX == m_curve.getLastX() && m_desiredY == m_curve.getLastY() && (NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY) < DriveConstants.kMinDistToBezierPoint);
+    	return m_desiredX == m_path.getLastX() && m_desiredY == m_path.getLastY() && (NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY) < DriveConstants.kMinDistToBezierPoint);
     }
 
     // Called once after isFinished returns true
