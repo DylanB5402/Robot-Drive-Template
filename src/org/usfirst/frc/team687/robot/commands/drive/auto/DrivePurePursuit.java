@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.command.Command;
  *https://www.ri.cmu.edu/pub_files/pub3/coulter_r_craig_1992_1/coulter_r_craig_1992_1.pdf
  *https://www.desmos.com/calculator/z6lujl7js2
  *https://www.chiefdelphi.com/media/papers/3398
+ *
+ *INCOMPLETE/WIP
  */
 public class DrivePurePursuit extends Command {
 

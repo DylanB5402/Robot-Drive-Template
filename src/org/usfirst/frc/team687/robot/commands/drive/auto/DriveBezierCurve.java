@@ -66,8 +66,9 @@ public class DriveBezierCurve extends Command {
     		m_straightError = m_path.getCurveLength() - Robot.drive.getAverageEncoderPosition();
         	m_straightPower = m_straightError * DriveConstants.kDriveP;
     	}  
-    	
-    	m_straightPower = Math.copySign(m_straightPower, m_direction);
+    	else {
+    		m_straightPower = Math.copySign(m_straightPower, m_direction);
+    	}
     	Robot.drive.setPower(m_straightPower - m_rotationalPower, m_straightPower + m_rotationalPower);    	
     	if (m_distanceToPoint < DriveConstants.kMinDistToBezierPoint) {
     		m_t += 1;
@@ -76,7 +77,7 @@ public class DriveBezierCurve extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return m_desiredX == m_path.getLastX() && m_desiredY == m_path.getLastY() && (NerdyMath.distanceFormula(m_currentX, m_currentY, m_desiredX, m_desiredY) < DriveConstants.kMinDistToBezierPoint);
+    	return m_desiredX == m_path.getLastX() && m_desiredY == m_path.getLastY() && (NerdyMath.distanceFormula(m_currentX, m_currentY, m_path.getLastX(), m_path.getLastY()) < DriveConstants.kMinDistToBezierPoint);
     }
 
     // Called once after isFinished returns true

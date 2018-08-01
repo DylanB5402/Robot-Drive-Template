@@ -69,8 +69,7 @@ public class Drive extends Subsystem {
 		
 		m_rightMaster.setInverted(true);
 		m_rightSlave1.setInverted(true);
-		m_rightSlave2.setInverted(true)
-		;
+		m_rightSlave2.setInverted(true);
 		m_leftMaster.setSensorPhase(false);
 		m_rightMaster.setSensorPhase(false);
 		
@@ -87,7 +86,7 @@ public class Drive extends Subsystem {
 		m_rightMaster.setNeutralMode(NeutralMode.Brake);
 		m_rightSlave1.setNeutralMode(NeutralMode.Brake);
 		m_rightSlave2.setNeutralMode(NeutralMode.Brake);
-
+		
 		
 	}
 	

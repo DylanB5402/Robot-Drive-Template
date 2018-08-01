@@ -43,4 +43,13 @@ public class DriveConstants {
 //	public static BezierCurve kTestCurveStraight = new BezierCurve()
 	public static double kMaximumTurnRadius = 50;
 	
+	public static double kRotD = 0;
+	public static double kRotMinPower = 0;
+	public static double kRotPMaxPower = 1;
+	
+	public static double kLeftAdjustment = 1;
+	public static double kRightAdjustment = 1;
+
+	
+	
 }

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team687.robot.utilities;
 
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 /**
  * 
@@ -11,6 +12,16 @@ public class NerdyTalon extends TalonSRX {
 
 	public NerdyTalon(int talonID) {
 		super(talonID);
+	}
+	
+	public void configDefaultSettings() {
+		configVoltageCompensation(12);
+		super.setStatusFramePeriod(StatusFrame.Status_1_General, 20, 0);
+		super.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 20, 0);
+		super.configPeakOutputForward(1, 0);
+		super.configPeakOutputReverse(-1, 0);
+		super.configClosedloopRamp(0.5, 0);
+		super.configOpenloopRamp(0.5, 0);	
 	}
 	
 	public void configPIDF(double p, double i, double d, double f, int slot) {

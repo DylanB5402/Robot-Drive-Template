@@ -85,21 +85,11 @@ public class BezierCurve {
 	}
 	
 	public double getLastX() {
-		if (m_xList.size() > 0) {
-			return m_xList.get((int) Math.round(m_step));
-		}
-		else {
-			return 0;
-		}
+			return m_xList.get(m_xList.size() -1);
 	}
 	
 	public double getLastY() {
-		if (m_yList.size() > 0) {
-			return m_yList.get((int) Math.round(m_step));
-		}
-		else {
-			return 0;
-		}
+		return m_yList.get(m_yList.size() - 1);
 	}
 }
 
