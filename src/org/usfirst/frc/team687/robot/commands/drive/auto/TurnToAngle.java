@@ -4,59 +4,85 @@ import org.usfirst.frc.team687.robot.Robot;
 import org.usfirst.frc.team687.robot.constants.DriveConstants;
 import org.usfirst.frc.team687.robot.utilities.NerdyMath;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ *@author Ted Lin
  */
+
 public class TurnToAngle extends Command {
-	
-	private double m_desiredAngle;
-	private double m_error;
-	private double m_currentAngle;
-	private double m_power;
-	
-    public TurnToAngle(double angle) {
-    	m_desiredAngle = angle;
-        requires(Robot.drive);
+
+    private double m_desiredAngle;
+    private double m_startTime, m_timeout;
+    private double m_error;
+    private double m_prevTimestamp;
+    private double m_prevError;
+    private double m_dTerm;
+
+    private int m_counter;
+    private int m_tolerance;
+
+    /**
+     * @param angle
+     * @param timeout
+     * @param tolerance
+     */
+    public TurnToAngle(double angle, int tolerance, double timeout) {
+	m_desiredAngle = angle;
+	m_tolerance = tolerance;
+	m_timeout = timeout;
+
+	// subsystem dependencies
+	requires(Robot.drive);
     }
 
-    // Called just before this Command runs the first time
+    @Override
     protected void initialize() {
-    	
+	SmartDashboard.putString("Current Drive Command", "TurnToAngle");
+	m_startTime = Timer.getFPGATimestamp();
+	m_counter = 0;
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    @Override
     protected void execute() {
-    	m_currentAngle = Robot.drive.getAngle();
-    	m_error = -m_desiredAngle - m_currentAngle;
-    	
-    	if (m_error >= 180) {
-    		m_error -= 360;
-    	}
-    	if (m_error <= -180) {
-    		m_error += 360;
-    	}
-    	
-    	m_power = m_error * DriveConstants.kRotP;
-    	
-    	NerdyMath.threshold(m_power, DriveConstants.kMinRotPower, DriveConstants.kMaxRotPower);
-    	
-    	Robot.drive.setPower(m_power, m_power);
+	double robotAngle = (360 - Robot.drive.getRawYaw()) % 360;
+	m_error = -m_desiredAngle - robotAngle;
+	m_error = (m_error > 180) ? m_error - 360 : m_error;
+	m_error = (m_error < -180) ? m_error + 360 : m_error;
+
+	m_dTerm = (m_prevError - m_error) / (m_prevTimestamp - Timer.getFPGATimestamp());
+	m_prevTimestamp = Timer.getFPGATimestamp();
+
+	double power = DriveConstants.kRotP * m_error + DriveConstants.kRotD * m_dTerm;
+	power = NerdyMath.threshold(power, DriveConstants.kRotMinPower, DriveConstants.kRotPMaxPower);
+	// power = Math.min(DriveConstants.kRotPMaxPower,
+	// Math.max(-DriveConstants.kRotPMaxPower, power));
+
+	Robot.drive.setPower(-power, power);
+	if (Math.abs(m_error) <= DriveConstants.kDriveRotationTolerance) {
+	    m_counter += 1;
+	} else {
+	    m_counter = 0;
+	}
+	m_prevError = m_error;
     }
 
-    // Make this return true when this Command no longer needs to run execute()
+    @Override
     protected boolean isFinished() {
-        return Math.abs(m_error) <= DriveConstants.kDriveRotationTolerance;
+	return m_counter > m_tolerance || Timer.getFPGATimestamp() - m_startTime > m_timeout;
+	// return false;
     }
 
-    // Called once after isFinished returns true
+    @Override
     protected void end() {
-    	Robot.drive.setPowerZero();
+	Robot.drive.setPowerZero();
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+    @Override
     protected void interrupted() {
+	end();
     }
+
 }
